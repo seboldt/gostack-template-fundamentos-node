@@ -26,13 +26,40 @@ class TransactionsRepository {
     return this.transactions;
   }
 
-  public getBalance({ income, outcome, total }): Balance {
+  public getBalance(): Balance {
     // TODO
+    let income = 0;
+    let outcome = 0;
+
+    this.transactions.map(transaction => {
+      if (transaction.type === 'income') {
+        income += transaction.value;
+      } else {
+        outcome += transaction.value;
+      }
+
+      return transaction;
+    });
+
+    const balance = {
+      income,
+      outcome,
+      total: income - outcome,
+    };
+
+    return balance;
   }
 
   public create({ title, value, type }: TransactionDTO): Transaction {
     // TODO
     const transaction = new Transaction({ title, value, type });
+    this.getBalance();
+    const check = this.getBalance();
+
+    if (transaction.type === 'outcome' && transaction.value > check.total) {
+      throw TypeError('Ok');
+    }
+
     this.transactions.push(transaction);
     return transaction;
   }
