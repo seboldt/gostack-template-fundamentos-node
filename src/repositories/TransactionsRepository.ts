@@ -57,7 +57,7 @@ class TransactionsRepository {
     const check = this.getBalance();
 
     if (transaction.type === 'outcome' && transaction.value > check.total) {
-      throw TypeError('Ok');
+      throw TypeError('does not have cash on hand');
     }
 
     this.transactions.push(transaction);
